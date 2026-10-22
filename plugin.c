@@ -33,8 +33,12 @@ MAKE_HOOK(3, hook_uread)
 MAKE_HOOK(4, hook_upeek2)
 MAKE_HOOK(5, hook_uread2)
 
+#ifndef KERNEL_PID
+#define KERNEL_PID 0x10005
+#endif
+
 static void add_hook(int idx, uint32_t nid, void *func) {
-  hook_ids[idx] = taiHookFunctionExport(&refs[idx], "SceCtrl", TAI_ANY_LIBRARY, nid, func);
+  hook_ids[idx] = taiHookFunctionExportForKernel(KERNEL_PID, &refs[idx], "SceCtrl", TAI_ANY_LIBRARY, nid, func);
 }
 
 static int combo_thread(SceSize args, void *argp) {
